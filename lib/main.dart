@@ -90,7 +90,11 @@ class _QuoteListState extends State<QuoteList> {
                 foregroundColor: MaterialStateProperty.all(Colors.black87),
               ),
               onPressed: () {
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => NextPage(book: quote),
+                  ),
                 );
               },
               icon: Icon(Icons.shopping_cart_sharp),
@@ -167,6 +171,140 @@ class RatingBar extends StatelessWidget {
           children: _starList,
         ),
       ],
+    );
+  }
+}
+class NextPage extends StatelessWidget {
+  final Quote book;
+
+  NextPage({required this.book});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Details'),
+        backgroundColor: Colors.black,
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image(image: AssetImage(book.image)),
+              SizedBox(height: 20),
+              Text(
+                book.text,
+                style: TextStyle(
+                  fontSize: 25.0,
+                  color: Colors.tealAccent[500],
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10),
+              Text(
+                book.author,
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.red[900],
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10),
+              RatingBar(rating: book.rating, ratingCount: book.ratingcount),
+              SizedBox(height: 10),
+              Text(
+                'Description: ${book.description}',
+                style: TextStyle(fontSize: 16.0),
+              ),
+              SizedBox(height: 5),
+              Text(
+                'Price: \$${book.price.toStringAsFixed(2)}',
+                style: TextStyle(fontSize: 25.0),
+
+              ),
+              SizedBox(height: 10.0),
+              Container(
+                child: DropdownMenuExample(),
+              ),
+              SizedBox(height: 18.0),
+              Container(
+                alignment: Alignment.center,
+                child: ElevatedButton.icon(
+
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  label: const Text('Go Back '),
+                  icon: Icon(Icons.arrow_back_ios_outlined),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(500)),
+                    ),
+                  ),
+
+                ),
+              ),
+              SizedBox(height: 18.0),
+              Container(
+                alignment: Alignment.center,
+                child: ElevatedButton.icon(
+                  onPressed: (){
+                  },
+                  label: const Text(
+                    'Buy Now 📚',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  icon: Icon(
+                    Icons.shopping_cart_outlined,
+                    size: 24.0,
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.deepPurpleAccent,
+                    padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 70.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(500)),
+                    ),
+                  ),
+                ),
+              ),
+
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+const List<String> list = <String>["Select Your Choose","eBook", "Pocket-sized edition"];
+
+class DropdownMenuExample extends StatefulWidget {
+  const DropdownMenuExample({super.key});
+
+  @override
+  State<DropdownMenuExample> createState() => _DropdownMenuExampleState();
+}
+
+class _DropdownMenuExampleState extends State<DropdownMenuExample> {
+  String dropdownValue = list.first;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownMenu<String>(
+      initialSelection: list.first,
+      onSelected: (String? value) {
+        setState(() {
+          dropdownValue = value!;
+        });
+      },
+      dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
+        return DropdownMenuEntry<String>(value: value, label: value);
+      }).toList(),
     );
   }
 }
